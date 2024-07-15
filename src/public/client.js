@@ -38,6 +38,10 @@ const App = (state) => {
                 </p>
                 ${ImageOfTheDay(apod)}
             </section>
+
+            <div class=''>DR1</div>
+            <div>DR1</div>
+            <div>DR1</div>
         </main>
         <footer></footer>
     `
