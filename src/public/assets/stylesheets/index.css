@@ -23,10 +23,26 @@ main {
 }
 
 .item-rover{
-  width: 300px;
-  height: 300px;
+  width: 200px;
+  height: 200px;
+  margin-bottom: 10px;
   background: url(../img/roverOpportunity.jpg) no-repeat center center/cover;
   cursor: pointer;
+  border-radius: 10px;
+}
+.label-rover{
+  text-align: center;
+  margin-top: 10px;
+  color: rgb(255, 0, 0);
+}
+
+.content-rover{
+  border: 1px solid #000;
+  border-radius: 10px;
+}
+.img-rover>img{
+  width: 200px;
+  height: 200px;
 }
 
 footer {
