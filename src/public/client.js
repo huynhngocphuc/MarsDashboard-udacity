@@ -33,12 +33,12 @@ const App = (state) => {
 
   return `
         <header></header>
-        <main>
+        <main class="container">
             ${Greeting(store.user.name)}
             <section>
                 <h3>Put things on the page!</h3>
                 <p>Here is an example section.</p>
-                <p>
+                <p class="paragraph">
                     One of the most popular websites at NASA is the Astronomy Picture of the Day. In fact, this website is one of
                     the most popular websites across all federal agencies. It has the popular appeal of a Justin Bieber video.
                     This endpoint structures the APOD imagery and associated metadata so that it can be repurposed for other
@@ -79,7 +79,7 @@ window.addEventListener("load", () => {
 const Greeting = (name) => {
   if (name) {
     return `
-            <h1>Welcome, ${name}!</h1>
+            <h1 class= "title">Welcome, ${name}!</h1>
         `;
   }
 
@@ -109,7 +109,7 @@ const ImageOfTheDay = (apod) => {
         `;
   } else {
     return `
-            <img src="${apod.image.url}" height="350px" width="100%" />
+            <img src="${apod.image.url}" height="350px" width="100%" class="image" />
             <p>${apod.image.explanation}</p>
         `;
   }
