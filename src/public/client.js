@@ -1,10 +1,10 @@
+
 let store = {
   user: { name: "Student" },
   apod: "",
   rovers: ["Curiosity", "Opportunity", "Spirit"],
 };
 
-// add our markup to the page
 const root = document.getElementById("root");
 
 const updateStore = (store, newState) => {
@@ -16,9 +16,9 @@ const render = async (root, state) => {
   root.innerHTML = App(state);
 };
 
-// handler click
 const handleClickRover = async (rover) => {
-  const url = "http://localhost:3000/apod"
+  const url = `http://localhost:3000/mars-photos/${rover}`
+  // const url = "http://localhost:3000/apod"
   const response= await fetch(url)
   if(response.ok){
 
@@ -27,55 +27,23 @@ const handleClickRover = async (rover) => {
   
 };
 
-// create content
 const App = (state) => {
   let { rovers, apod } = state;
-
+  console.log("🚀 ~ App ~ rovers:", rovers, apod)
+  
   return `
-        <header></header>
-        <main class="container">
-            ${Greeting(store.user.name)}
-            <section>
-                <h3>Put things on the page!</h3>
-                <p>Here is an example section.</p>
-                <p class="paragraph">
-                    One of the most popular websites at NASA is the Astronomy Picture of the Day. In fact, this website is one of
-                    the most popular websites across all federal agencies. It has the popular appeal of a Justin Bieber video.
-                    This endpoint structures the APOD imagery and associated metadata so that it can be repurposed for other
-                    applications. In addition, if the concept_tags parameter is set to True, then keywords derived from the image
-                    explanation are returned. These keywords could be used as auto-generated hashtags for twitter or instagram feeds;
-                    but generally help with discoverability of relevant imagery.
-                </p>
-                ${ImageOfTheDay(apod)}
-            </section>
-
-        <div class="list-rover">
-            <div class="item-rover" onclick="handleClickRover('${rovers[0]}')">
-                <div class="label-rover">${rovers[0]}</div>
-            </div>
-            <div class="item-rover" onclick="handleClickRover('${rovers[1]}')">
-                <div class="label-rover">${rovers[1]}</div>
-            </div>
-            <div class="item-rover" onclick="handleClickRover('${rovers[2]}')">
-                <div class="label-rover">${rovers[2]}</div>
-            </div>
-        </div>
-        <div class="content">
-        
-        </div>
-        </main>
-        <footer></footer>
-    `;
+       <div class="list-car">
+        <button class="btn" onclick="handleClickRover('${rovers[0]}')">Curiosity</button>
+        <button class="btn">Opportunity</button>
+        <button class="btn">Spirit </button>
+      </div>
+  `
 };
 
-// listening for load event because page should load before any JS is called
 window.addEventListener("load", () => {
   render(root, store);
 });
 
-// ------------------------------------------------------  COMPONENTS
-
-// Pure function that renders conditional information -- THIS IS JUST AN EXAMPLE, you can delete it.
 const Greeting = (name) => {
   if (name) {
     return `
@@ -88,7 +56,6 @@ const Greeting = (name) => {
     `;
 };
 
-// Example of a pure function that renders infomation requested from the backend
 const ImageOfTheDay = (apod) => {
   // If image does not already exist, or it is not from today -- request it again
   const today = new Date();
@@ -115,9 +82,6 @@ const ImageOfTheDay = (apod) => {
   }
 };
 
-// ------------------------------------------------------  API CALLS
-
-// Example API call
 const getImageOfTheDay = (state) => {
   let { apod } = state;
 
@@ -127,3 +91,11 @@ const getImageOfTheDay = (state) => {
 
   return data;
 };
+
+const getImageCar = (nameCar) =>{
+  console.log("��� ~ getImageCar ~ nameCar:", nameCar)
+  // fetch data from API and update the store
+  fetch(`https://api.example.com/car/${nameCar}`)
+   .then(response => response.json())
+   .then(data => updateStore(store, { car: data }));
+}
