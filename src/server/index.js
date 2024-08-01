@@ -30,7 +30,8 @@ app.get("/apod", async (req, res) => {
 app.get("/mars-photos/:namecar", async (req, res) => {
   console.log("🚀 ~ app.get ~ photos:",req.params.namecar)
   try {
-    const url = `https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=1&api_key=${process.env.API_KEY}`;
+    const nameCar = req.params.namecar.toLowerCase();
+    const url = `https://api.nasa.gov/mars-photos/api/v1/rovers/${nameCar}/latest_photos?api_key=${process.env.API_KEY}`;
     let imageCar = await fetch(url)
     imageCar = await imageCar.json();
     res.send(imageCar)

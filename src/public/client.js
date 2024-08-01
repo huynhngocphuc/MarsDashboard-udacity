@@ -1,8 +1,8 @@
-
 let store = {
   user: { name: "Student" },
   apod: "",
   rovers: ["Curiosity", "Opportunity", "Spirit"],
+  currentRover: null,
 };
 
 const root = document.getElementById("root");
@@ -17,27 +17,31 @@ const render = async (root, state) => {
 };
 
 const handleClickRover = async (rover) => {
-  const url = `http://localhost:3000/mars-photos/${rover}`
-  // const url = "http://localhost:3000/apod"
-  const response= await fetch(url)
-  if(response.ok){
-
-    console.log("🚀 ~ handleClickRover ~ response:", response)
-  }
-  
+  const data = await getImageCar(rover);
+  updateStore(store, { currentRover: data });
+  console.log("🚀 ~ handleClickRover ~ data:", data);
 };
 
 const App = (state) => {
-  let { rovers, apod } = state;
-  console.log("🚀 ~ App ~ rovers:", rovers, apod)
-  
-  return `
-       <div class="list-car">
-        <button class="btn" onclick="handleClickRover('${rovers[0]}')">Curiosity</button>
-        <button class="btn">Opportunity</button>
-        <button class="btn">Spirit </button>
-      </div>
-  `
+  let { rovers, apod, currentRover } = state;
+  console.log("🚀 ~ App ~ state:", state);
+  return !currentRover?.latest_photos?.length
+    ? 
+    `
+      <h1 class="list-car">true </h1>
+    `
+    : `
+   <h1 class="list-car"> false </h1>
+ `;
+
+  // return `
+  //      <div class="list-car">
+  //       <button class="btn" onclick="handleClickRover('${rovers[0]}')">Curiosity</button>
+  //       <button class="btn" onclick="handleClickRover('${rovers[1]}')">Opportunity</button>
+  //       <button class="btn" onclick="handleClickRover('${rovers[2]}')">Spirit </button>
+  //     </div>
+
+  // `;
 };
 
 window.addEventListener("load", () => {
@@ -84,18 +88,15 @@ const ImageOfTheDay = (apod) => {
 
 const getImageOfTheDay = (state) => {
   let { apod } = state;
-
   fetch(`http://localhost:3000/apod`)
     .then((res) => res.json())
     .then((apod) => updateStore(store, { apod }));
-
   return data;
 };
 
-const getImageCar = (nameCar) =>{
-  console.log("��� ~ getImageCar ~ nameCar:", nameCar)
+const getImageCar = async (nameCar) => {
   // fetch data from API and update the store
-  fetch(`https://api.example.com/car/${nameCar}`)
-   .then(response => response.json())
-   .then(data => updateStore(store, { car: data }));
-}
+  const response = await fetch(`http://localhost:3000/mars-photos/${nameCar}`);
+  const data = await response.json();
+  return data;
+};
