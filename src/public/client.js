@@ -19,7 +19,6 @@ const render = async (root, state) => {
 const handleClickRover = async (rover) => {
   const data = await getImageCar(rover);
   updateStore(store, { currentRover: data });
-  console.log("🚀 ~ handleClickRover ~ data:", data);
 };
 
 const App = (state) => {
