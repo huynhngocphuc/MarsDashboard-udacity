@@ -23,25 +23,31 @@ const handleClickRover = async (rover) => {
 };
 
 const App = (state) => {
-  let { rovers, apod, currentRover } = state;
-  console.log("🚀 ~ App ~ state:", state);
-  return !currentRover?.latest_photos?.length
-    ? 
-    `
-      <h1 class="list-car">true </h1>
-    `
-    : `
-   <h1 class="list-car"> false </h1>
- `;
-
-  // return `
-  //      <div class="list-car">
-  //       <button class="btn" onclick="handleClickRover('${rovers[0]}')">Curiosity</button>
-  //       <button class="btn" onclick="handleClickRover('${rovers[1]}')">Opportunity</button>
-  //       <button class="btn" onclick="handleClickRover('${rovers[2]}')">Spirit </button>
-  //     </div>
-
-  // `;
+  let { currentRover } = state;
+  if (!currentRover?.latest_photos?.length) {
+    return `
+        <main>
+           ${renderImagesOfTheDay(state)}
+          <div class="list-car">
+            ${renderButton()}
+          </div>
+        </main>
+        <footer></footer>
+    
+   `;
+  } else {
+    return `
+    <main>
+      ${renderImagesOfTheDay(state)}
+      <div class="list-car">
+        ${renderButton()}
+      </div>
+      <div class="list-card">
+        ${renderImages(state)}
+      </div>
+    </main>
+      `;
+  }
 };
 
 window.addEventListener("load", () => {
@@ -54,7 +60,6 @@ const Greeting = (name) => {
             <h1 class= "title">Welcome, ${name}!</h1>
         `;
   }
-
   return `
         <h1>Hello!</h1>
     `;
@@ -64,9 +69,6 @@ const ImageOfTheDay = (apod) => {
   // If image does not already exist, or it is not from today -- request it again
   const today = new Date();
   const photodate = new Date(apod.date);
-  console.log(photodate.getDate(), today.getDate());
-
-  console.log(photodate.getDate() === today.getDate());
   if (!apod || apod.date === today.getDate()) {
     getImageOfTheDay(store);
   }
@@ -99,4 +101,60 @@ const getImageCar = async (nameCar) => {
   const response = await fetch(`http://localhost:3000/mars-photos/${nameCar}`);
   const data = await response.json();
   return data;
+};
+
+const renderImages = (state) => {
+  const { currentRover } = state;
+  return currentRover.latest_photos
+    .map((item) => {
+      return `
+       <div class="container card">
+        <img
+          src=${item.img_src}
+          alt="placeholder"
+          class="card-image"
+          placeholder="image not available"
+        />
+        <div class="content">
+         <div>Name: <span>${item.rover.name}</span></div>
+          <div>Launch Date: <span>${item.rover.launch_date}</span></div>
+          <div>Landing Date: <span>${item.rover.landing_date}</span></div>
+          <div>Status: <span>${item.rover.status}</span></div>
+          <div>
+            Date taken:
+            <span>${item.earth_date}</span>
+          </div>
+        </div> 
+      </div>
+      `;
+    })
+    .join("");
+};
+
+const renderButton = () => {
+  return `
+    <button class="btn" onclick="handleClickRover('${store.rovers[0]}')">Curiosity</button>
+    <button class="btn" onclick="handleClickRover('${store.rovers[1]}')">Opportunity</button>
+    <button class="btn" onclick="handleClickRover('${store.rovers[2]}')">Spirit </button>
+  `;
+};
+
+const renderImagesOfTheDay = (state) => {
+  let { apod } = state;
+  return `
+      ${Greeting(store.user.name)}
+        <section>
+          <h3>Put things on the page!</h3>
+          <p>Here is an example section.</p>
+          <p>
+              One of the most popular websites at NASA is the Astronomy Picture of the Day. In fact, this website is one of
+              the most popular websites across all federal agencies. It has the popular appeal of a Justin Bieber video.
+              This endpoint structures the APOD imagery and associated metadata so that it can be repurposed for other
+              applications. In addition, if the concept_tags parameter is set to True, then keywords derived from the image
+              explanation are returned. These keywords could be used as auto-generated hashtags for twitter or instagram feeds;
+              but generally help with discoverability of relevant imagery.
+          </p>
+          ${ImageOfTheDay(apod)}
+        </section>   
+    `;
 };

@@ -5,7 +5,8 @@ body {
   flex-direction: column;
   font-family: Arial;
   min-height: 100vh;
-}
+  border: solid 2px #ccc
+ }
 
 header {
   /* header styles */
@@ -15,10 +16,19 @@ main {
   flex: 1;
   padding: 20px;
 }
+span {
+  font-weight: 700;
+}
+.list-card{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 20px
+}
 .card {
   width: 300px;
   background: white;
-  padding: .4em;
+  padding: 0.4em;
   border-radius: 6px;
   border: 1px solid #ccc;
 }
@@ -44,6 +54,13 @@ main {
   cursor: pointer;
   margin: 5px;
 }
+.image-welcome {
+  
+}
+section {
+  
+}
+
 
 
 /* -------------------  TABLET  --------------------- */
